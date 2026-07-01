@@ -12,7 +12,9 @@ start cmd /k "npm run dev"
 
 echo.
 echo All servers started!
-echo Frontend is available at: http://localhost:3000
-echo Admin Panel is available at: http://localhost:3000/admin
+echo Next.js Frontend: http://localhost:3000
+echo PHP Backend API: http://127.0.0.1:8000/api/blogs.php
+echo.
+echo IMPORTANT: Make sure to visit http://127.0.0.1:8000/api/init_db.php ONCE to setup your tables in phpMyAdmin!
 echo.
 pause
