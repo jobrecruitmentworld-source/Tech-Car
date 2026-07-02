@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiArrowRight, FiClock } from 'react-icons/fi';
+import { FiArrowRight, FiClock, FiEye } from 'react-icons/fi';
 
 function getImageUrl(url) {
   if (!url) return '';
@@ -52,56 +52,50 @@ export default function BlogGrid({ initialBlogs }) {
             </p>
           </div>
         ) : (
-          filteredBlogs.map((blog, index) => (
-            <Link href={`/blog/${blog.slug}`} key={blog.id} className="group flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-100 transition-all duration-300 hover:-translate-y-1">
-              
-              {/* Image Container */}
-              <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100">
-                {blog.featured_image ? (
-                  <Image 
+          filteredBlogs.map((blog) => (
+            <Link href={`/blog/${blog.slug}`} key={blog.id}>
+              <div className="bg-slate-800/50 backdrop-blur-md rounded-2xl overflow-hidden shadow-sm hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] transition-all duration-300 border border-slate-700 hover:border-indigo-500/50 flex flex-col h-full group">
+                {/* Image Container with aspect ratio */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-700">
+                  <img 
                     src={getImageUrl(blog.featured_image)} 
-                    alt={blog.title} 
-                    fill
-                    priority={index < 4 && activeCategory === 'All'}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    alt={blog.title}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
                   />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200" />
-                )}
+                  {/* Overlay gradient for text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
                 
-                {/* Category Badge over image */}
-                {blog.category_name && (
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-slate-900 text-xs font-bold rounded-full shadow-sm">
-                      {blog.category_name}
+                {/* Content Container */}
+                <div className="p-6 flex flex-col flex-grow relative">
+                  {/* Category Badge - Adjusted position */}
+                  <div className="absolute -top-4 left-6">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-500 text-white shadow-md">
+                      {blog.category_name || 'Uncategorized'}
                     </span>
                   </div>
-                )}
-              </div>
-              
-              {/* Content Container */}
-              <div className="flex flex-col flex-grow p-6 md:p-8">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-blue-600 transition-colors leading-tight line-clamp-2">
-                  {blog.title}
-                </h3>
-                
-                <p className="text-slate-500 text-base leading-relaxed mb-6 flex-grow line-clamp-3">
-                  {blog.short_description || (blog.seo && blog.seo.meta_description ? blog.seo.meta_description : 'Read more about this topic inside...')}
-                </p>
-                
-                {/* Footer */}
-                <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-100">
-                  <div className="flex items-center gap-2 text-sm text-slate-500 font-medium">
-                    <div className="w-6 h-6 rounded-full bg-slate-200 overflow-hidden relative border border-slate-300">
-                      <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="Author" className="object-cover w-full h-full" />
-                    </div>
-                    <span className="flex items-center gap-1.5"><FiClock className="text-slate-400" /> {new Date(blog.published_at || blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                  </div>
                   
-                  <span className="flex items-center text-blue-600 font-semibold text-sm group-hover:translate-x-1 transition-transform">
-                    Read <FiArrowRight className="ml-1" />
-                  </span>
+                  <h3 className="text-xl font-bold text-white mt-4 mb-3 line-clamp-2 leading-tight group-hover:text-indigo-300 transition-colors">
+                    {blog.title}
+                  </h3>
+                  
+                  <p className="text-slate-400 text-sm mb-6 line-clamp-3 leading-relaxed flex-grow">
+                    {blog.short_description || blog.long_description?.substring(0, 120) + '...'}
+                  </p>
+                  
+                  {/* Footer section */}
+                  <div className="flex items-center justify-between pt-4 border-t border-slate-700 mt-auto">
+                    <div className="flex items-center text-slate-500 text-xs font-medium gap-3">
+                      <span className="flex items-center gap-1.5 bg-slate-800 px-2 py-1 rounded-md">
+                        <FiEye size={14} className="text-indigo-400" /> {blog.views || 0}
+                      </span>
+                      <span className="flex items-center gap-1.5 bg-slate-800 px-2 py-1 rounded-md">
+                        <FiClock size={14} className="text-indigo-400" /> 
+                        {new Date(blog.created_at || blog.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </Link>

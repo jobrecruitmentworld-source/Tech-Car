@@ -207,13 +207,13 @@ export default async function BlogPage({ params }) {
               <h4 className="text-lg font-bold text-slate-700">Tags & Topics</h4>
             </div>
             <div className="flex flex-wrap gap-2">
-              {blog.tags?.map(tag => (
-                <span key={tag.id} className="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-sm font-semibold hover:bg-slate-200 transition-colors">
+              {blog.tags?.map((tag, index) => (
+                <span key={tag.id || `tag-${index}`} className="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-sm font-semibold hover:bg-slate-200 transition-colors">
                   #{tag.tag}
                 </span>
               ))}
-              {blog.keywords?.map(kw => (
-                <span key={kw.id} className="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium hover:border-slate-300 transition-colors">
+              {blog.keywords?.map((kw, index) => (
+                <span key={kw.id || `kw-${index}`} className="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium hover:border-slate-300 transition-colors">
                   {kw.keyword}
                 </span>
               ))}
